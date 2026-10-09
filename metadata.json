@@ -1,0 +1,6 @@
+{
+  "name": "AOS Foundation",
+  "description": "AOS Foundation bridges the gap between parents, communities and educational opportunities by providing notebooks, school bags, shoes, uniforms, and essential learning materials.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
