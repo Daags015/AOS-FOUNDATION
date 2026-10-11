@@ -27,11 +27,24 @@ interface HomePageProps {
 
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   const [showSafeguarding, setShowSafeguarding] = useState(false);
-  const content = DataStore.getSiteContent();
-  const programmes = DataStore.getProgrammes();
-  const stats = DataStore.getImpactStats();
-  const gallery = DataStore.getGallery(true, true).slice(0, 3);
-  const news = DataStore.getNewsPosts().filter((n) => n.published).slice(0, 2);
+  const [content, setContent] = useState(() => DataStore.getSiteContent());
+  const [programmes, setProgrammes] = useState(() => DataStore.getProgrammes());
+  const [stats, setStats] = useState(() => DataStore.getImpactStats());
+  const [gallery, setGallery] = useState(() => DataStore.getGallery(true, true).slice(0, 3));
+  const [news, setNews] = useState(() => DataStore.getNewsPosts().filter((n) => n.published).slice(0, 2));
+
+  React.useEffect(() => {
+    const handleUpdate = () => {
+      setContent(DataStore.getSiteContent());
+      setProgrammes(DataStore.getProgrammes());
+      setStats(DataStore.getImpactStats());
+      setGallery(DataStore.getGallery(true, true).slice(0, 3));
+      setNews(DataStore.getNewsPosts().filter((n) => n.published).slice(0, 2));
+    };
+
+    window.addEventListener('aos_store_updated', handleUpdate);
+    return () => window.removeEventListener('aos_store_updated', handleUpdate);
+  }, []);
 
   const featuredProgramme =
     programmes.find((p) => p.featured) || programmes[0];
@@ -93,21 +106,37 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 </button>
               </div>
 
-              {/* Trust Indicators */}
-              <div className="pt-6 border-t border-[#E6DDD5] grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-[#525252]">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#B05A28] shrink-0" />
-                  <span>Dignified Direct Support</span>
+              {/* Trust Indicators (Configurable & Toggleable from CMS) */}
+              {(content.showTrustBadge1 !== false ||
+                content.showTrustBadge2 !== false ||
+                content.showTrustBadge3 !== false) && (
+                <div className="pt-6 border-t border-[#E6DDD5] flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-[#525252]">
+                  {content.showTrustBadge1 !== false && (
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-[#B05A28] shrink-0" />
+                      <span className="font-medium text-[#262626]">
+                        {content.trustBadge1Text || 'Dignified Direct Support'}
+                      </span>
+                    </div>
+                  )}
+                  {content.showTrustBadge2 !== false && (
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-[#B05A28] shrink-0" />
+                      <span className="font-medium text-[#262626]">
+                        {content.trustBadge2Text || 'Strict Safeguarding'}
+                      </span>
+                    </div>
+                  )}
+                  {content.showTrustBadge3 !== false && (
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-[#B05A28] shrink-0" />
+                      <span className="font-medium text-[#262626]">
+                        {content.trustBadge3Text || 'Zero Fabricated Stats'}
+                      </span>
+                    </div>
+                  )}
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#B05A28] shrink-0" />
-                  <span>Strict Safeguarding</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#B05A28] shrink-0" />
-                  <span>Zero Fabricated Stats</span>
-                </div>
-              </div>
+              )}
             </div>
 
             {/* Right Column: Hovering Elevated Hero Visual with Continuous Motion */}

@@ -24,6 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { label: 'Gallery', path: '/gallery' },
     { label: 'Get Involved', path: '/get-involved' },
     { label: 'News', path: '/news' },
+    { label: 'FAQ', path: '/faq' },
     { label: 'Transparency', path: '/reports' },
     { label: 'Contact', path: '/contact' },
   ];

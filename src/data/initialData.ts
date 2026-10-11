@@ -71,6 +71,12 @@ export const initialSiteContent: SiteContent = {
   youtubeComingSoon: true,
   youtubeComingSoonNotice:
     'Official field video dispatches are currently in production. High-transparency documentary footage from our community primary school material distributions will be published here upon editorial and safeguarding clearance.',
+  showTrustBadge1: true,
+  trustBadge1Text: 'Dignified Direct Support',
+  showTrustBadge2: true,
+  trustBadge2Text: 'Strict Safeguarding',
+  showTrustBadge3: true,
+  trustBadge3Text: 'Zero Fabricated Stats',
 };
 
 export const initialProgrammes: Programme[] = [

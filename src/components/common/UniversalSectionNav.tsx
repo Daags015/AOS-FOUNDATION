@@ -50,16 +50,10 @@ export const UniversalSectionNav: React.FC<UniversalSectionNavProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Track scroll progress for subtle indicator
   useEffect(() => {
-    const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (totalHeight > 0) {
-        setScrollProgress(Math.min(100, Math.round((window.scrollY / totalHeight) * 100)));
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleOpenNav = () => setIsOpen(true);
+    window.addEventListener('aos_open_section_nav', handleOpenNav);
+    return () => window.removeEventListener('aos_open_section_nav', handleOpenNav);
   }, []);
 
   // Ordered list of main public website sections/features
@@ -331,50 +325,6 @@ export const UniversalSectionNav: React.FC<UniversalSectionNavProps> = ({
 
   return (
     <>
-      {/* Floating Universal Navigation Bar (Persistent at bottom-right of viewport) */}
-      <aside
-        aria-label="Section Navigation Controls"
-        className="fixed bottom-5 right-4 sm:right-6 z-40 flex items-center gap-1.5 p-1 rounded-full bg-[#111111]/92 backdrop-blur-md text-white shadow-2xl border border-white/20 select-none animate-in fade-in duration-300"
-      >
-        {/* Previous Section Navigation Button */}
-        <button
-          type="button"
-          onClick={handleGoBack}
-          title={prevSection ? `Go back to: ${prevSection.title}` : 'Go back to former section'}
-          className="flex items-center gap-1 px-3 py-2 rounded-full hover:bg-white/15 active:scale-95 text-xs font-bold transition-all cursor-pointer text-white/90 hover:text-white"
-        >
-          <ArrowLeft className="w-4 h-4 text-[#C2764B]" />
-          <span className="hidden md:inline text-[11px]">Back</span>
-        </button>
-
-        {/* Center: Open Full Section Navigator Sheet */}
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[#B05A28] hover:bg-[#8F431E] text-white active:scale-95 text-xs font-bold transition-all shadow-md cursor-pointer"
-          title="Open Full Section & Feature Navigator"
-        >
-          <Compass className="w-4 h-4 animate-spin-slow" />
-          <span className="font-extrabold tracking-wide">
-            {isInAdmin ? 'Admin Sections' : 'Sections'}
-          </span>
-          <span className="hidden sm:inline text-[10px] bg-white/20 px-1.5 py-0.5 rounded-full font-mono capitalize">
-            {isInAdmin ? effectiveAdminTab : currentTitle.split(' ')[0]}
-          </span>
-        </button>
-
-        {/* Next Section Navigation Button */}
-        <button
-          type="button"
-          onClick={handleGoNext}
-          title={nextSection ? `Next section: ${nextSection.title}` : 'Navigate to next section'}
-          className="flex items-center gap-1 px-3 py-2 rounded-full hover:bg-white/15 active:scale-95 text-xs font-bold transition-all cursor-pointer text-white/90 hover:text-white"
-        >
-          <span className="hidden md:inline text-[11px]">Next</span>
-          <ArrowRight className="w-4 h-4 text-[#C2764B]" />
-        </button>
-      </aside>
-
       {/* Full Modal Drawer: Complete Section & Feature Explorer */}
       {isOpen && (
         <div

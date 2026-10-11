@@ -117,6 +117,13 @@ export interface SiteContent {
   youtubeChannelUrl?: string;
   youtubeComingSoon?: boolean;
   youtubeComingSoonNotice?: string;
+  // Trust Badges under Hero (Editable & Toggleable)
+  showTrustBadge1?: boolean;
+  trustBadge1Text?: string;
+  showTrustBadge2?: boolean;
+  trustBadge2Text?: string;
+  showTrustBadge3?: boolean;
+  trustBadge3Text?: string;
 }
 
 export interface YouTubeVideoItem {

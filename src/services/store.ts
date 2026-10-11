@@ -40,26 +40,36 @@ const STORAGE_KEYS = {
   MASTER_PASSWORD: 'aos_master_password_v1',
 };
 
-// Safe LocalStorage helpers
+// In-memory runtime cache ensuring state persistence even if LocalStorage hits quota limits
+const inMemoryStore = new Map<string, unknown>();
+
+// Safe LocalStorage helpers with runtime cache fallback
 function safeGet<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(key);
-    if (!raw) return fallback;
-    return JSON.parse(raw) as T;
+    if (raw) {
+      const parsed = JSON.parse(raw) as T;
+      inMemoryStore.set(key, parsed);
+      return parsed;
+    }
   } catch (e) {
     console.warn(`Error reading ${key} from storage:`, e);
-    return fallback;
   }
+  if (inMemoryStore.has(key)) {
+    return inMemoryStore.get(key) as T;
+  }
+  return fallback;
 }
 
 function safeSet<T>(key: string, value: T): void {
+  inMemoryStore.set(key, value);
   try {
     localStorage.setItem(key, JSON.stringify(value));
-    // Emit custom event for cross-component reactivity
-    window.dispatchEvent(new CustomEvent('aos_store_updated', { detail: { key } }));
   } catch (e) {
-    console.error(`Error saving ${key} to storage:`, e);
+    console.warn(`LocalStorage quota exceeded or restricted for ${key}, state kept in runtime memory:`, e);
   }
+  // Always emit custom event for cross-component reactivity
+  window.dispatchEvent(new CustomEvent('aos_store_updated', { detail: { key } }));
 }
 
 export interface SupabaseConfig {
@@ -388,9 +398,24 @@ export const DataStore = {
     const list = safeGet<TeamMember[]>(STORAGE_KEYS.TEAM_MEMBERS, initialTeamMembers);
     const sorted = [...list].sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
     if (onlyPublished) {
-      return sorted.filter((m) => m.published);
+      return sorted.filter((m) => m.published !== false);
     }
     return sorted;
+  },
+  updateTeamMemberPhoto(id: string, imageUrl: string): boolean {
+    const list = this.getTeamMembers();
+    const index = list.findIndex((m) => m.id === id);
+    if (index >= 0) {
+      const updated = [...list];
+      updated[index] = {
+        ...updated[index],
+        imageUrl,
+        published: updated[index].published !== false,
+      };
+      safeSet(STORAGE_KEYS.TEAM_MEMBERS, updated);
+      return true;
+    }
+    return false;
   },
   saveTeamMember(member: TeamMember): TeamMember {
     const list = this.getTeamMembers();
@@ -399,6 +424,7 @@ export const DataStore = {
 
     const enriched = {
       ...member,
+      published: member.published !== false,
       createdAt: member.createdAt || new Date().toISOString(),
     };
 

@@ -75,6 +75,8 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
                     <img
                       src={member.imageUrl}
                       alt={member.name}
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
                       className="w-full h-full object-cover object-top group-hover:scale-104 transition-transform duration-500 ease-out"
                     />
                   ) : (

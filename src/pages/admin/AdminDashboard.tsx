@@ -286,7 +286,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
       } else if (target === 'news') {
         setEditingNews((prev) => (prev ? { ...prev, coverImage: result } : prev));
       } else if (target === 'team') {
-        updateEditingMember({ imageUrl: result });
+        const photoUrl = result;
+        setEditingMember((prev) => {
+          if (!prev) return null;
+          const next = { ...prev, imageUrl: photoUrl };
+          try {
+            localStorage.setItem(TEAM_DRAFT_KEY, JSON.stringify(next));
+            sessionStorage.setItem('aos_team_member_draft', JSON.stringify(next));
+          } catch {
+            // Ignore quota errors
+          }
+          if (next.id) {
+            DataStore.updateTeamMemberPhoto(next.id, photoUrl);
+            setTeamMembers(DataStore.getTeamMembers());
+          }
+          return next;
+        });
       }
     } catch (err) {
       console.warn('Canvas compression fallback to standard reader:', err);
@@ -300,7 +315,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
         } else if (target === 'news') {
           setEditingNews((prev) => (prev ? { ...prev, coverImage: result } : prev));
         } else if (target === 'team') {
-          updateEditingMember({ imageUrl: result });
+          const photoUrl = result;
+          setEditingMember((prev) => {
+            if (!prev) return null;
+            const next = { ...prev, imageUrl: photoUrl };
+            try {
+              localStorage.setItem(TEAM_DRAFT_KEY, JSON.stringify(next));
+              sessionStorage.setItem('aos_team_member_draft', JSON.stringify(next));
+            } catch {
+              // Ignore
+            }
+            if (next.id) {
+              DataStore.updateTeamMemberPhoto(next.id, photoUrl);
+              setTeamMembers(DataStore.getTeamMembers());
+            }
+            return next;
+          });
         }
       };
       reader.readAsDataURL(file);
@@ -2130,6 +2160,125 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                   </div>
                 </div>
 
+                {/* Trust Badges under Hero (Toggle ON/OFF & Custom Text) */}
+                <div className="pt-4 border-t border-[#E6DDD5] space-y-4">
+                  <div>
+                    <h4 className="text-sm font-bold text-[#111111]">
+                      Homepage Trust Indicators (Badges Under Hero)
+                    </h4>
+                    <p className="text-xs text-[#525252]">
+                      Easily toggle each indicator ON/OFF or edit the exact words and sentences displayed on the public homepage.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3 p-4 rounded-xl bg-[#FCFAF7] border border-[#E6DDD5]">
+                    {/* Badge 1: Dignified Direct Support */}
+                    <div className="p-3 bg-white rounded-lg border border-[#E6DDD5] space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={siteContent.showTrustBadge1 !== false}
+                            onChange={(e) =>
+                              setSiteContent({ ...siteContent, showTrustBadge1: e.target.checked })
+                            }
+                            className="rounded text-[#B05A28] focus:ring-[#B05A28] w-4 h-4 cursor-pointer"
+                          />
+                          <span className="text-xs font-bold text-[#111111]">
+                            Trust Indicator #1
+                          </span>
+                        </label>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          siteContent.showTrustBadge1 !== false
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : 'bg-neutral-100 text-neutral-500'
+                        }`}>
+                          {siteContent.showTrustBadge1 !== false ? 'Active (ON)' : 'Hidden (OFF)'}
+                        </span>
+                      </div>
+                      <input
+                        type="text"
+                        value={siteContent.trustBadge1Text ?? 'Dignified Direct Support'}
+                        placeholder="Dignified Direct Support"
+                        onChange={(e) =>
+                          setSiteContent({ ...siteContent, trustBadge1Text: e.target.value })
+                        }
+                        className="w-full px-3 py-1.5 border rounded text-xs"
+                      />
+                    </div>
+
+                    {/* Badge 2: Strict Safeguarding */}
+                    <div className="p-3 bg-white rounded-lg border border-[#E6DDD5] space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={siteContent.showTrustBadge2 !== false}
+                            onChange={(e) =>
+                              setSiteContent({ ...siteContent, showTrustBadge2: e.target.checked })
+                            }
+                            className="rounded text-[#B05A28] focus:ring-[#B05A28] w-4 h-4 cursor-pointer"
+                          />
+                          <span className="text-xs font-bold text-[#111111]">
+                            Trust Indicator #2
+                          </span>
+                        </label>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          siteContent.showTrustBadge2 !== false
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : 'bg-neutral-100 text-neutral-500'
+                        }`}>
+                          {siteContent.showTrustBadge2 !== false ? 'Active (ON)' : 'Hidden (OFF)'}
+                        </span>
+                      </div>
+                      <input
+                        type="text"
+                        value={siteContent.trustBadge2Text ?? 'Strict Safeguarding'}
+                        placeholder="Strict Safeguarding"
+                        onChange={(e) =>
+                          setSiteContent({ ...siteContent, trustBadge2Text: e.target.value })
+                        }
+                        className="w-full px-3 py-1.5 border rounded text-xs"
+                      />
+                    </div>
+
+                    {/* Badge 3: Zero Fabricated Stats */}
+                    <div className="p-3 bg-white rounded-lg border border-[#E6DDD5] space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={siteContent.showTrustBadge3 !== false}
+                            onChange={(e) =>
+                              setSiteContent({ ...siteContent, showTrustBadge3: e.target.checked })
+                            }
+                            className="rounded text-[#B05A28] focus:ring-[#B05A28] w-4 h-4 cursor-pointer"
+                          />
+                          <span className="text-xs font-bold text-[#111111]">
+                            Trust Indicator #3
+                          </span>
+                        </label>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          siteContent.showTrustBadge3 !== false
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : 'bg-neutral-100 text-neutral-500'
+                        }`}>
+                          {siteContent.showTrustBadge3 !== false ? 'Active (ON)' : 'Hidden (OFF)'}
+                        </span>
+                      </div>
+                      <input
+                        type="text"
+                        value={siteContent.trustBadge3Text ?? 'Zero Fabricated Stats'}
+                        placeholder="Zero Fabricated Stats"
+                        onChange={(e) =>
+                          setSiteContent({ ...siteContent, trustBadge3Text: e.target.value })
+                        }
+                        className="w-full px-3 py-1.5 border rounded text-xs"
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="pt-2">
                   <button
                     type="button"
@@ -2969,6 +3118,32 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                               {member.department}
                             </span>
                           )}
+
+                          {/* Quick Direct Photo Upload Button */}
+                          <label className="absolute bottom-2 right-2 px-2 py-1 bg-black/75 hover:bg-[#B05A28] text-white rounded-md text-[10px] font-bold shadow-md cursor-pointer flex items-center gap-1 transition-all z-10 active:scale-95">
+                            <Upload className="w-3 h-3" />
+                            <span>{member.imageUrl ? 'Change Photo' : 'Upload Photo'}</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+                                try {
+                                  const compressed = await compressImageFile(file, 450, 450, 0.75);
+                                  DataStore.updateTeamMemberPhoto(member.id, compressed);
+                                  setTeamMembers(DataStore.getTeamMembers());
+                                  triggerToast(`Photo for ${member.name} uploaded and updated on public site!`);
+                                } catch (err) {
+                                  console.error('Failed to upload team photo:', err);
+                                  triggerToast('Could not process photo. Please try a standard JPEG/PNG.');
+                                } finally {
+                                  if (e.target) e.target.value = '';
+                                }
+                              }}
+                            />
+                          </label>
                         </div>
 
                         <div className="p-4 space-y-2">
