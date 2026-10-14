@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { FloatingWhatsApp } from './components/common/FloatingWhatsApp';
-import { UniversalSectionNav } from './components/common/UniversalSectionNav';
 
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
+import { TeamPage } from './pages/TeamPage';
 import { ProgrammesPage } from './pages/ProgrammesPage';
 import { ProgrammeDetailPage } from './pages/ProgrammeDetailPage';
 import { ImpactPage } from './pages/ImpactPage';
@@ -73,6 +73,11 @@ export default function App() {
       updatePageSEO(
         'About Us',
         'Learn why AOS Foundation was founded, our mission to supply basic school kits with dignity, and our core community values.'
+      );
+    } else if (currentPath === '/team') {
+      updatePageSEO(
+        'Meet Our Team',
+        'Meet the dedicated leadership, trustees, and field stewards coordinating basic school supplies for children.'
       );
     } else if (currentPath === '/programmes') {
       updatePageSEO(
@@ -166,6 +171,10 @@ export default function App() {
       return <AboutPage onNavigate={navigate} />;
     }
 
+    if (currentPath === '/team') {
+      return <TeamPage onNavigate={navigate} />;
+    }
+
     if (currentPath === '/programmes') {
       return <ProgrammesPage onNavigate={navigate} />;
     }
@@ -245,9 +254,6 @@ export default function App() {
       {!isAdminRoute && <Footer onNavigate={navigate} />}
 
       {!isAdminRoute && <FloatingWhatsApp />}
-
-      {/* Universal Cross-Section Navigation System for All Features & Admin */}
-      <UniversalSectionNav currentPath={currentPath} onNavigate={navigate} isAdmin={isAdmin} />
     </div>
   );
 }

@@ -2,8 +2,6 @@ import React from 'react';
 import { DataStore } from '../services/store';
 import { Shield, Heart, Eye, Target, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
 import { ImageWithFallback } from '../components/common/ImageWithFallback';
-import { TeamSection } from '../components/common/TeamSection';
-import { InlineSectionBar } from '../components/common/InlineSectionBar';
 
 interface AboutPageProps {
   onNavigate: (path: string) => void;
@@ -14,14 +12,6 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen pb-16">
-      {/* Top Cross-Section Navigation Bar */}
-      <InlineSectionBar
-        currentTitle="About Us"
-        prevSection={{ title: 'Home Overview', path: '/' }}
-        nextSection={{ title: 'Strategic Programmes', path: '/programmes' }}
-        breadcrumbs={[{ title: 'About Us' }]}
-        onNavigate={onNavigate}
-      />
       {/* Header */}
       <section className="bg-white border-b border-[#E6DDD5] py-16 sm:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -195,17 +185,40 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* Leadership & Stewards Section */}
-      <TeamSection />
+      {/* Leadership & Stewards Gateway */}
+      <section className="py-16 sm:py-20 bg-white border-t border-[#E6DDD5]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="p-8 sm:p-12 rounded-2xl bg-[#FCFAF7] border border-[#E6DDD5] flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="space-y-3 max-w-xl">
+              <div className="text-xs font-bold uppercase tracking-widest text-[#B05A28]">
+                Governance & Field Coordinators
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-[#111111]">
+                Meet the Stewards Behind AOS Foundation
+              </h3>
+              <p className="text-sm text-[#525252] leading-relaxed">
+                Our organization is steered by committed community educators, trustees, and logistics coordinators ensuring every exercise book, backpack, shoe, and uniform reaches public school pupils with complete accountability.
+              </p>
+            </div>
 
-      {/* Bottom Cross-Section Pathway Navigation */}
-      <InlineSectionBar
-        currentTitle="About Us"
-        prevSection={{ title: 'Home Overview', path: '/' }}
-        nextSection={{ title: 'Strategic Programmes', path: '/programmes' }}
-        onNavigate={onNavigate}
-        isBottom
-      />
+            <div className="shrink-0 flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => onNavigate('/team')}
+                className="px-6 py-3.5 rounded-md bg-[#B05A28] hover:bg-[#8F431E] text-white text-xs font-bold uppercase tracking-wider shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2"
+              >
+                <span>Meet Our Team</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => onNavigate('/reports')}
+                className="px-5 py-3.5 rounded-md bg-white hover:bg-[#F3EAE2] text-[#111111] text-xs font-bold border border-[#E6DDD5] transition-colors cursor-pointer text-center"
+              >
+                Governance & Reports
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

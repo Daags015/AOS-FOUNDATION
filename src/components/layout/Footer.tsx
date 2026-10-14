@@ -101,12 +101,28 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </ul>
           </div>
 
-          {/* Col 4: Engagement & Giving */}
+          {/* Col 4: Engagement & Team */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-widest text-[#B05A28] mb-4">
-              Get Involved
+              Organization & Action
             </h4>
             <ul className="space-y-2.5 text-sm text-[#FCFAF7]/70">
+              <li>
+                <button
+                  onClick={() => handleNav('/about')}
+                  className="hover:text-white transition-colors text-left"
+                >
+                  About AOS Foundation
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleNav('/team')}
+                  className="hover:text-white transition-colors text-left font-medium text-white/90"
+                >
+                  Meet Our Team
+                </button>
+              </li>
               <li>
                 <button
                   onClick={() => handleNav('/donate')}
@@ -129,14 +145,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   className="hover:text-white transition-colors text-left"
                 >
                   Volunteer Registry
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => handleNav('/news')}
-                  className="hover:text-white transition-colors text-left"
-                >
-                  News & Dispatch
                 </button>
               </li>
               <li>

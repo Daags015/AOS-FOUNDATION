@@ -18,7 +18,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const navLinks = [
     { label: 'Home', path: '/' },
     { label: 'About', path: '/about' },
-    { label: 'Our Team', path: '/about#team' },
+    { label: 'Meet Our Team', path: '/team' },
     { label: 'Programmes', path: '/programmes' },
     { label: 'Impact', path: '/impact' },
     { label: 'Gallery', path: '/gallery' },
@@ -63,7 +63,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Zone 2: Navigation Links (Desktop) */}
-          <nav className="hidden lg:flex items-center gap-7 text-[14px] font-medium text-[#262626]">
+          <nav className="hidden xl:flex items-center gap-4.5 2xl:gap-6 text-[13px] 2xl:text-[14px] font-medium text-[#262626]">
             {navLinks.map((link) => {
               const isActive =
                 currentPath === link.path ||
@@ -114,7 +114,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Mobile Menu Hamburger */}
-          <div className="flex lg:hidden items-center gap-2">
+          <div className="flex xl:hidden items-center gap-2">
             <button
               onClick={() => handleLinkClick('/donate')}
               className="sm:hidden px-3 py-1.5 text-xs font-bold text-white bg-[#B05A28] rounded-md"
@@ -134,7 +134,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-[#E6DDD5] bg-[#FCFAF7] px-4 pt-3 pb-6 space-y-2 shadow-lg animate-in slide-in-from-top-2 duration-200">
+        <div className="xl:hidden border-t border-[#E6DDD5] bg-[#FCFAF7] px-4 pt-3 pb-6 space-y-2 shadow-lg animate-in slide-in-from-top-2 duration-200">
           <div className="flex flex-col space-y-1">
             {navLinks.map((link) => {
               const isActive = currentPath === link.path;

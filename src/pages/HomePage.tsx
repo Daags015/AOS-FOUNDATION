@@ -7,19 +7,13 @@ import {
   Users,
   ShieldAlert,
   ShieldCheck,
-  Sparkles,
-  FileText,
-  Heart,
   ChevronRight,
   ExternalLink,
-  Compass,
 } from 'lucide-react';
 import { DataStore } from '../services/store';
 import { ImageWithFallback } from '../components/common/ImageWithFallback';
 import { YouTubeSection } from '../components/common/YouTubeSection';
-import { TeamSection } from '../components/common/TeamSection';
 import { formatWhatsAppUrl, formatDate } from '../utils';
-import { InlineSectionBar } from '../components/common/InlineSectionBar';
 
 interface HomePageProps {
   onNavigate: (path: string) => void;
@@ -45,9 +39,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
     window.addEventListener('aos_store_updated', handleUpdate);
     return () => window.removeEventListener('aos_store_updated', handleUpdate);
   }, []);
-
-  const featuredProgramme =
-    programmes.find((p) => p.featured) || programmes[0];
 
   const whatsappHero = formatWhatsAppUrl(
     '08168779732',
@@ -105,38 +96,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   Volunteer
                 </button>
               </div>
-
-              {/* Trust Indicators (Configurable & Toggleable from CMS) */}
-              {(content.showTrustBadge1 !== false ||
-                content.showTrustBadge2 !== false ||
-                content.showTrustBadge3 !== false) && (
-                <div className="pt-6 border-t border-[#E6DDD5] flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-[#525252]">
-                  {content.showTrustBadge1 !== false && (
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#B05A28] shrink-0" />
-                      <span className="font-medium text-[#262626]">
-                        {content.trustBadge1Text || 'Dignified Direct Support'}
-                      </span>
-                    </div>
-                  )}
-                  {content.showTrustBadge2 !== false && (
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#B05A28] shrink-0" />
-                      <span className="font-medium text-[#262626]">
-                        {content.trustBadge2Text || 'Strict Safeguarding'}
-                      </span>
-                    </div>
-                  )}
-                  {content.showTrustBadge3 !== false && (
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#B05A28] shrink-0" />
-                      <span className="font-medium text-[#262626]">
-                        {content.trustBadge3Text || 'Zero Fabricated Stats'}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
 
             {/* Right Column: Hovering Elevated Hero Visual with Continuous Motion */}
@@ -176,9 +135,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                       <span className="text-xs font-bold uppercase tracking-wider text-[#8F431E]">
                         Essential Supplies Pack
                       </span>
-                      <span className="text-[11px] font-mono text-[#B05A28] bg-[#FAF3EE] px-2 py-0.5 rounded font-bold">
-                        Pillar 01
-                      </span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 text-xs text-[#262626]">
@@ -201,71 +157,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                     </div>
                   </div>
                 </div>
-
-                {/* Floating Accent Badge overlapping bottom corner */}
-                <div className="hidden sm:flex absolute -bottom-3 -left-3 items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-[#E6DDD5] shadow-lg group-hover:-translate-y-2 transition-transform duration-300">
-                  <div className="w-7 h-7 rounded-full bg-[#FAF3EE] text-[#B05A28] flex items-center justify-center font-bold text-xs">
-                    ✓
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-bold text-[#8F431E] uppercase tracking-wider block">
-                      Direct Support
-                    </span>
-                    <span className="text-xs font-semibold text-[#111111] block">
-                      Public School Distribution
-                    </span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-
-      {/* 1.5 HOMEPAGE QUICK SECTION NAVIGATION BAR */}
-      <nav
-        aria-label="Homepage Section Navigation"
-        className="bg-[#FAF3EE] border-b border-[#E6DDD5] py-2.5 sticky top-16 z-20 backdrop-blur-md"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 overflow-x-auto text-xs">
-          <div className="flex items-center gap-1.5 shrink-0">
-            <Compass className="w-3.5 h-3.5 text-[#B05A28]" />
-            <span className="font-bold text-[#8F431E] uppercase tracking-wider text-[11px] mr-1">
-              Sections:
-            </span>
-          </div>
-
-          <div className="flex items-center gap-1.5 shrink-0">
-            {[
-              { id: 'focus-programmes', label: 'Programmes' },
-              { id: 'impact-statistics', label: 'Impact' },
-              { id: 'field-gallery', label: 'Gallery' },
-              { id: 'team-section', label: 'Our Team' },
-              { id: 'partner-pathways', label: 'Get Involved' },
-              { id: 'safeguarding-spotlight', label: 'Safeguarding' },
-              { id: 'news-dispatches', label: 'News' },
-            ].map((section) => (
-              <a
-                key={section.id}
-                href={`#${section.id}`}
-                className="px-2.5 py-1 rounded-md bg-white hover:bg-[#F3EAE2] text-[#262626] hover:text-[#B05A28] border border-[#E6DDD5] font-semibold text-[11px] transition-colors shrink-0"
-              >
-                {section.label}
-              </a>
-            ))}
-          </div>
-
-          <div className="shrink-0 flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => onNavigate('/donate')}
-              className="px-3 py-1 rounded-md bg-[#B05A28] hover:bg-[#8F431E] text-white font-bold text-[11px] uppercase tracking-wider transition-colors shrink-0 shadow-2xs"
-            >
-              Support Our Work →
-            </button>
-          </div>
-        </div>
-      </nav>
 
       {/* 2. THE CHALLENGE & 3. OUR RESPONSE */}
       <section id="focus-programmes" className="py-16 sm:py-24 bg-white border-b border-[#E6DDD5]">
@@ -467,75 +363,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* 6. FEATURED PROGRAMME SPOTLIGHT */}
-      {featuredProgramme && (
-        <section className="py-16 sm:py-24 bg-[#FAF3EE] border-b border-[#E6DDD5]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl border border-[#E6DDD5] p-8 lg:p-12 shadow-sm">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <div className="lg:col-span-7 space-y-5">
-                  <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#B05A28]">
-                    <span>Featured Initiative</span>
-                    <span>·</span>
-                    <span>{featuredProgramme.category}</span>
-                  </div>
-
-                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#111111]">
-                    {featuredProgramme.title}
-                  </h3>
-
-                  <p className="text-sm sm:text-base text-[#404040] leading-relaxed">
-                    {featuredProgramme.fullDescription}
-                  </p>
-
-                  <div className="space-y-2 pt-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#8F431E]">
-                      Distribution Pack Checklist:
-                    </span>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#262626]">
-                      {featuredProgramme.materialsIncluded.map((mat) => (
-                        <div key={mat} className="flex items-center gap-2">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#B05A28] shrink-0" />
-                          <span>{mat}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="pt-4 flex flex-wrap items-center gap-3">
-                    <button
-                      onClick={() => onNavigate(`/programmes/${featuredProgramme.slug}`)}
-                      className="px-5 py-2.5 rounded-md bg-[#B05A28] hover:bg-[#8F431E] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
-                    >
-                      Read Full Details
-                    </button>
-                    <button
-                      onClick={() => onNavigate('/donate')}
-                      className="px-5 py-2.5 rounded-md bg-white hover:bg-[#F3EAE2] text-[#111111] text-xs font-bold border border-[#E6DDD5] transition-colors cursor-pointer"
-                    >
-                      Sponsor This Kit
-                    </button>
-                  </div>
-                </div>
-
-                <div className="lg:col-span-5">
-                  <div className="rounded-xl overflow-hidden border border-[#E6DDD5] shadow-xs">
-                    <ImageWithFallback
-                      src={featuredProgramme.coverImage}
-                      alt={featuredProgramme.title}
-                      category={featuredProgramme.category}
-                      aspectRatio="video"
-                      className="w-full h-80 object-cover"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 7. REAL PROGRAMME PHOTOGRAPHS / GALLERY PREVIEW */}
+      {/* 5. IMPACT & EVIDENCE */}
+      {/* 6. REAL PROGRAMME PHOTOGRAPHS / GALLERY PREVIEW */}
       <section id="field-gallery" className="py-16 bg-white border-b border-[#E6DDD5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
@@ -606,13 +435,41 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       {/* 8. YOUTUBE FIELD VIDEO DOCUMENTARIES & OFFICIAL CHANNEL */}
       <YouTubeSection />
 
-      {/* 9. MEET OUR TEAM SECTION */}
-      <div id="team-section">
-        <TeamSection
-          title="Meet Our Dedicated Team"
-          subtitle="Get to know the passionate stewards coordinating public school assessments, material packaging, logistics, and transparent donor stewardship."
-        />
-      </div>
+      {/* 8. LEADERSHIP & FIELD STEWARDS SPOTLIGHT */}
+      <section className="py-16 sm:py-20 bg-white border-b border-[#E6DDD5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="p-8 sm:p-12 rounded-2xl bg-[#FCFAF7] border border-[#E6DDD5] flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div className="space-y-3 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF3EE] border border-[#E6DDD5] text-xs font-semibold text-[#8F431E]">
+                <Users className="w-3.5 h-3.5 text-[#B05A28]" />
+                <span>Our Leadership & Stewards</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111111]">
+                Driven by Local Educators & Community Advocates
+              </h2>
+              <p className="text-sm text-[#525252] leading-relaxed">
+                Meet the passionate team coordinating public school assessments, material packaging, verified distribution, and transparent donor stewardship across Nigeria.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
+              <button
+                onClick={() => onNavigate('/team')}
+                className="px-6 py-3.5 rounded-md bg-[#B05A28] hover:bg-[#8F431E] text-white text-xs font-bold uppercase tracking-wider shadow-sm transition-all cursor-pointer flex items-center gap-2"
+              >
+                <span>Meet Our Dedicated Team</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => onNavigate('/volunteer')}
+                className="px-5 py-3.5 rounded-md bg-white hover:bg-[#F3EAE2] text-[#111111] text-xs font-bold border border-[#E6DDD5] transition-colors cursor-pointer"
+              >
+                Join Volunteer Registry
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* 10. HOW YOU CAN HELP: 4 CLEAR PATHWAYS */}
       <section id="partner-pathways" className="py-16 sm:py-24 bg-[#FCFAF7] border-b border-[#E6DDD5]">
@@ -815,15 +672,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </div>
         </div>
       </section>
-
-      {/* Bottom Cross-Section Navigation Bar */}
-      <InlineSectionBar
-        currentTitle="Home Overview"
-        prevSection={{ title: 'Frequently Asked Questions', path: '/faq' }}
-        nextSection={{ title: 'About AOS Foundation', path: '/about' }}
-        onNavigate={onNavigate}
-        isBottom
-      />
     </div>
   );
 };
